@@ -9,13 +9,15 @@ red = (255,0,0)
 
 
 
-
+# A Tile represents a single piece on a TicTacToe Board.
+# A Tile has a size and a location on the board.
+# A Tile can either be empty (' ') or filled with an X('x') or and O('o').
 class Tile:
     def __init__(self, screen, pos):
         self.screen = screen
         self.height = 30
         self.width = 30
-        #play is a space, x or an o
+        #play is a space x or an o
         self.player = ' '
         self.pos = pos
 
@@ -29,6 +31,9 @@ class Tile:
         text_surface = myfont.render(self.player, False, red)
         self.screen.blit(text_surface, self.pos)
 
+# A Game draws the board and  maintains the rules of TicTacToe.
+# It switches the players turn and makes sure users cannot click a Tile already been played.
+# A Game also detects whether win/loss/tie.
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((300,300))
@@ -74,7 +79,6 @@ class Game:
             else:
                 tile = 8
                 
-        # if the is open:
         if self.is_open(tile):
             if self.turn % 2 == 0:
                 self.tiles[tile].make_x()
@@ -130,11 +134,12 @@ class Game:
                         g = GameOver(self.get_winner())
                         running = False
                         g.run()
-                    #print(pos)
             self.screen.fill(black)
             self.draw()
             pygame.display.update()
 
+# Home represents the home screen of the game. Introduces the game. 
+# Directs the user to press Space to continue.
 class Home:
     def __init__(self):
         self.screen = pygame.display.set_mode((500,500))
@@ -163,11 +168,12 @@ class Home:
             self.draw()
             pygame.display.update()
 
+# GameOver represents the end screen. Displays the result of the previous game.
+# Allows user to restart a new game by pressing space.
 class GameOver:
     def __init__(self, gamestate):
         self.screen = pygame.display.set_mode((500,500))
         self.gamestate = gamestate
-        # gamestate is ' ', 'x', 'o'
 
     def draw(self):
         if self.gamestate == ' ':
@@ -196,6 +202,6 @@ class GameOver:
             self.draw()
             pygame.display.update()
         
-
+#Initialize the home screen upon running the script.
 h = Home()
 h.run()
