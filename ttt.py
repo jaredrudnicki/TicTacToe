@@ -21,12 +21,15 @@ class Tile:
         self.player = ' '
         self.pos = pos
 
+    #sets the tile to player x's tile
     def make_x(self):
         self.player = 'x'
 
+    #sets the tile to player o's tile
     def make_o(self):
         self.player = 'o'
 
+    #places either an x, o, or nothing on the tile graphically.
     def draw(self):
         text_surface = myfont.render(self.player, False, red)
         self.screen.blit(text_surface, self.pos)
@@ -42,6 +45,7 @@ class Game:
             Tile(self.screen, (50,150)), Tile(self.screen, (150,150)), Tile(self.screen, (250,150)),
              Tile(self.screen, (50,250)), Tile(self.screen, (150,250)), Tile(self.screen, (250,250))]
 
+    #draws the lines of a tictactoe board and draws each tile in the board
     def draw(self):
         pygame.draw.line(self.screen, red, (100,0), (100,300))
         pygame.draw.line(self.screen, red, (200,0), (200,300))
@@ -50,9 +54,13 @@ class Game:
         for tile in self.tiles:
             tile.draw()
 
+    #checks whether a given tile is available for a player to click on
+    #which means the tiles player is not an x nor an o
     def is_open(self, tile_number):
         return self.tiles[tile_number].player == ' '
 
+    #changes the tile clicked to the current player, only if that tile is available
+    #will allow that player to click again if they click a non available tile
     def move(self, pos):
         x = pos[0]
         y = pos[1]
@@ -86,6 +94,7 @@ class Game:
                 self.tiles[tile].make_o()
             self.turn = self.turn + 1
 
+    #returns either 'x', 'o', or ' '(draw) for the winner
     def get_winner(self):
         winner = ' '
         options = [[self.tiles[0], self.tiles[1], self.tiles[2]],
@@ -106,6 +115,7 @@ class Game:
                     
         return winner
     
+    #checks if the game is over, either with a winner or a draw (filled board with no winner)
     def is_game_over(self):
         
         if self.get_winner() == ' ':
@@ -118,7 +128,8 @@ class Game:
             return True
         
                     
-
+    #runs the main game loop
+    #checks for user events 
     def run(self):
         running = True
         while running:
@@ -144,6 +155,7 @@ class Home:
     def __init__(self):
         self.screen = pygame.display.set_mode((500,500))
 
+    #draws the text on the home screen: intro and guidance to continue to Game
     def draw(self):
         text_surface_1 = myfont.render('WELCOME TO TICTACTOE', False, red)
         text_surface_2 = myfont.render('game created by Jared', False, red)
@@ -152,6 +164,8 @@ class Home:
         self.screen.blit(text_surface_2, (20,130))
         self.screen.blit(text_surface_3, (20,250))
 
+    #home run loop that detect user events
+    #draws Home screen and sends to Game
     def run(self):
         running = True
         while running:
@@ -175,6 +189,7 @@ class GameOver:
         self.screen = pygame.display.set_mode((500,500))
         self.gamestate = gamestate
 
+    #draws the text of the end screen: result of previous game and guidance to restart
     def draw(self):
         if self.gamestate == ' ':
             text_surface = myfont.render('tie!', False, red)
@@ -186,6 +201,8 @@ class GameOver:
         self.screen.blit(text_surface, (20, 100))
         self.screen.blit(text_surface_2, (20, 250))
 
+    #running loop of gameover screen
+    #draws the screen and detects user input to restart
     def run(self):
         running = True
         while running:
